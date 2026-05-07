@@ -1,0 +1,7 @@
+/data
+build/
+output/
+__pycache__/
+**/__pycache__/
+*.so
+pcdet.egg-info/

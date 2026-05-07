@@ -2,7 +2,7 @@
 #include <torch/extension.h>
 
 #define CHECK_CUDA(x) do { \
-  if (!x.type().is_cuda()) { \
+  if (!x.is_cuda()) { \
     fprintf(stderr, "%s must be CUDA tensor at %s:%d\n", #x, __FILE__, __LINE__); \
     exit(-1); \
   } \
@@ -39,11 +39,11 @@ int roipool3d_gpu(at::Tensor xyz, at::Tensor boxes3d, at::Tensor pts_feature, at
     int sampled_pts_num = pooled_features.size(2);
 
 
-    const float * xyz_data = xyz.data<float>();
-    const float * boxes3d_data = boxes3d.data<float>();
-    const float * pts_feature_data = pts_feature.data<float>();
-    float * pooled_features_data = pooled_features.data<float>();
-    int * pooled_empty_flag_data = pooled_empty_flag.data<int>();
+    const float * xyz_data = xyz.data_ptr<float>();
+    const float * boxes3d_data = boxes3d.data_ptr<float>();
+    const float * pts_feature_data = pts_feature.data_ptr<float>();
+    float * pooled_features_data = pooled_features.data_ptr<float>();
+    int * pooled_empty_flag_data = pooled_empty_flag.data_ptr<int>();
 
     roipool3dLauncher(batch_size, pts_num, boxes_num, feature_in_len, sampled_pts_num,
                        xyz_data, boxes3d_data, pts_feature_data, pooled_features_data, pooled_empty_flag_data);
